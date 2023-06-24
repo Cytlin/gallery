@@ -15,7 +15,7 @@ pipeline {
         // nodejs('node18.0.0'){
         //   sh 'npm install'
         // }
-        sh './gradlew-v'
+        sh 'gradle build'
       }
     }
     stage('Test') {
