@@ -11,9 +11,10 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building'
-        nodejs('node18.0.0'){
-          sh 'npm install'
-        }
+        sh 'npm install'
+        // nodejs('node18.0.0'){
+        //   sh 'npm install'
+        // }
         sh './gradlew-v'
       }
     }
