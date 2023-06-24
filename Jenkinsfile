@@ -1,7 +1,7 @@
 pipeline {
   agent any
   tools{
-    gradle 'gradle8.2'
+    gradle 'gradle7.0'
   }
   // environment{
   //   SERVER_CREDENTIALS= credentials('')
