@@ -11,11 +11,12 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building'
+        sh 'gradle build'
         sh 'npm install'
         // nodejs('node18.0.0'){
         //   sh 'npm install'
         // }
-        sh 'gradle build'
+        
       }
     }
     stage('Test') {
