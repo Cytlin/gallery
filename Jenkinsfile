@@ -27,6 +27,7 @@ pipeline {
       // }
       steps {
         echo 'Testing'
+        sh 'npm test'
       }
     }
     stage('Deploy') {
@@ -45,15 +46,19 @@ pipeline {
     }
     
   }
-  post{
-    always{
-      echo 'Pipeline has executed'
-    }
-    success{
-      echo 'Pipeline has been succeeded'
-    }
-    failure{
-      echo 'Pipeline has failed'
-    }
+
+  post {
+        always {
+            // Send email notification only if tests fail
+            script {
+                def testResult = sh(returnStatus: true, script: 'npm test')
+                if (testResult != 0) {
+                    emailext subject: 'Test Results - Failed',
+                        body: 'The tests have failed. Please investigate.',
+                        to: 'cytlinadhiambo@gmail.com'
+                }
+            }
+        }
   }
 }
+
