@@ -3,28 +3,20 @@ pipeline {
   tools{
     gradle 'gradle7.0'
   }
-  // environment{
-  //   SERVER_CREDENTIALS= credentials('')
-  // }
+  environment{
+    BUILD_ID="${env.BUILD_ID}"
+  }
   
   stages {
     stage('Build') {
       steps {
         echo 'Building'
+        slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
         sh 'gradle build'
-        sh 'npm install'
-        // nodejs('node18.0.0'){
-        //   sh 'npm install'
-        // }
-        
+        sh 'npm install'       
       }
     }
     stage('Test') {
-      // when{
-      //   expression{
-      //     BRANCH_NAME=='test' || BRANCH_NAME=='master'
-      //   }
-      // }
       steps {
         echo 'Testing'
         sh 'npm test'
@@ -33,15 +25,8 @@ pipeline {
     stage('Deploy') {
       steps {
         echo 'Deploying'
-        nodejs('node18.0.0'){
-          sh 'node server'
-        }
-        // withCredentials{[
-        //   usernamePassword(credentials:'credentials=id', usernameVariable:USER, passwordVariable:PWD)
-        // ]}{
-        //   sh "some script ${USER}  ${PWD}"
-        // }
-        //sh npm Build
+        slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
+        sh 'node server'
       }
     }
     
@@ -56,6 +41,13 @@ pipeline {
                     emailext subject: 'Test Results - Failed',
                         body: 'The tests have failed. Please investigate.',
                         to: 'cytlinadhiambo@gmail.com'
+                }
+            }
+
+            script {
+                def deployResult = sh(returnStatus: true, script: 'node server')
+                if (deployResult = 0) {
+                    slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
                 }
             }
         }
