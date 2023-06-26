@@ -11,7 +11,6 @@ pipeline {
     BUILD_ID="${env.BUILD_ID}"
     RENDER_URL= 'https://cytlin-ip-1.onrender.com'
   }
-  MY_VARIABLE = 'my value'
   
   stages {
     stage('Build') {
