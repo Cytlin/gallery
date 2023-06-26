@@ -38,4 +38,25 @@ pipeline {
     }    
   }  
 }
+ post {
+        always {
+            // Send email notification only if tests fail
+            script {
+                def testResult = sh(returnStatus: true, script: 'npm test')
+                if (testResult != 0) {
+                    emailext subject: 'Test Results - Failed',
+                        body: 'The tests have failed. Please investigate.',
+                        to: 'cytlinadhiambo@gmail.com'
+                }
+            }
+
+            script {
+                def deployResult = sh(returnStatus: true, script: 'node server')
+                if (testResult != 1) {
+                    slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: https://cytlin-ip-1.onrender.com ")
+                }
+            }
+
+        }
+ }
 }
