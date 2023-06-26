@@ -26,8 +26,10 @@ pipeline {
       steps {
         echo 'Deploying'
         slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
-        sh 'node server'
-      }
+        withCredentials([usernameColonPassword(credentialsId: 'heroku', variable: 'HEROKU_CREDENTIALS' )]){
+         sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/mighty-earth-27385.git master'
+         sh 'node server'
+        }
     }
     
   }
