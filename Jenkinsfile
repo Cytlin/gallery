@@ -48,11 +48,11 @@ pipeline {
 
             script {
                 def deployResult = sh(returnStatus: true, script: 'node server')
-                if (deployResult = 0) {
+                if (testResult != 0) {
                     slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
                 }
             }
+
         }
   }
 }
-
