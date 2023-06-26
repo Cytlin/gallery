@@ -1,5 +1,9 @@
 pipeline {
-  agent any
+  agent{
+    node {
+      label 'node18.0.0'
+    }
+  }  
   tools{
     gradle 'gradle7.0'
   }
@@ -30,30 +34,7 @@ pipeline {
          sh 'git push https://${HEROKU_CREDENTIALS}@git.heroku.com/mighty-earth-27385.git master'
          sh 'node server'
         }
-    }
-    
-  }
-
-  // post {
-  //       always {
-  //           // Send email notification only if tests fail
-  //           script {
-  //               def testResult = sh(returnStatus: true, script: 'npm test')
-  //               if (testResult != 0) {
-  //                   emailext subject: 'Test Results - Failed',
-  //                       body: 'The tests have failed. Please investigate.',
-  //                       to: 'cytlinadhiambo@gmail.com'
-  //               }
-  //           }
-
-  //           script {
-  //               def deployResult = sh(returnStatus: true, script: 'node server')
-  //               if (testResult != 0) {
-  //                   slackSend(message:"Build ID: ${env.BUILD_ID}  Render URL: ")
-  //               }
-  //           }
-
-  //       }
-  // }
+    }    
+  }  
 }
 }
